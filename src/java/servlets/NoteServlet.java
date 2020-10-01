@@ -30,16 +30,20 @@ public class NoteServlet extends HttpServlet {
             }
         } 
         
+        Note note = new Note(title, contents);
+        request.setAttribute("note", note);
+        br.close();
+        
         if (request.getParameter("edit") == null) {
-            Note note = new Note(title, contents);
-            request.setAttribute("note", note);
-            
             getServletContext().getRequestDispatcher("/WEB-INF/viewNote.jsp")
-            .forward(request, response);
+                .forward(request, response);
         }
         else {
-        getServletContext().getRequestDispatcher("/WEB-INF/editNote.jsp")
-            .forward(request, response);
+            String newContents = contents.replaceAll("<br>", "&#13;&#10;");
+            note.setContents(newContents);
+            
+            getServletContext().getRequestDispatcher("/WEB-INF/editNote.jsp")
+                .forward(request, response);
         }
     }
 
