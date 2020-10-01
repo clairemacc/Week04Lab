@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Note;
 
 /**
  *
@@ -18,13 +19,28 @@ public class NoteServlet extends HttpServlet {
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");
         BufferedReader br = new BufferedReader(new FileReader(new File(path)));
         
-        String ln = br.readLine();
-        ln += "<br>" + br.readLine();
-        request.setAttribute("test", ln);
+        String title = "";
+        String contents = "";
+        String ln;
+        
+        while ((ln = br.readLine()) != null) {
+            title = ln;
+            while ((ln = br.readLine()) != null){
+                contents += ln + "<br>";
+            }
+        } 
+        
+        if (request.getParameter("edit") == null) {
+            Note note = new Note(title, contents);
+            request.setAttribute("note", note);
             
-                
-        getServletContext().getRequestDispatcher("/WEB-INF/viewNote.jsp")
+            getServletContext().getRequestDispatcher("/WEB-INF/viewNote.jsp")
             .forward(request, response);
+        }
+        else {
+        getServletContext().getRequestDispatcher("/WEB-INF/editNote.jsp")
+            .forward(request, response);
+        }
     }
 
     @Override
