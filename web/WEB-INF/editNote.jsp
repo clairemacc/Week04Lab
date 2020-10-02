@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td>Contents: </td>
-                    <td><textarea>${note.contents}</textarea></td>
+                    <td><textarea name="editContents">${note.contents}</textarea></td>
                 </tr>
             </table>
             <input type="submit" value="Save">
